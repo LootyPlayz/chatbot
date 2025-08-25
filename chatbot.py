@@ -5,6 +5,7 @@ responses = {
     "hello": ["Hello!", "Hi there!", "Hey! How are you?"],
     "how are you": ["I'm good, thanks!", "Doing great!", "All good here, what about you?"],
     "bye": ["Goodbye!", "See you later!", "Take care!"],
+    "who made you": ["I am an ai made by LootyPlayz aka Gaurav"],
 }
 
 def get_response(user_input):
