@@ -1,27 +1,19 @@
 # app.py
-from flask import Flask, request, jsonify, render_template
+from flask import Flask, request, jsonify
 from chatbot import get_response
 
-app = Flask(__name__, template_folder="templates", static_folder="static")
+app = Flask(__name__)
 
 @app.route("/")
 def home():
-    return render_template("index.html")
+    return "Chatbot is running!"
 
 @app.route("/chat", methods=["POST"])
 def chat():
-    data = request.get_json(force=True) or {}
-    user_input = data.get("message", "").strip()
-    if not user_input:
-        return jsonify({"response": "Please type something."}), 400
+    data = request.json
+    user_input = data.get("message", "")
     response = get_response(user_input)
     return jsonify({"response": response})
 
 if __name__ == "__main__":
     app.run(debug=True)
-
-    import os
-
-    PORT = int(os.environ.get("PORT", 10000))
-    app.run(host="0.0.0.0", port=PORT)
-

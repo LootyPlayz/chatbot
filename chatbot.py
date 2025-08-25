@@ -1,37 +1,24 @@
 # chatbot.py
-from transformers import pipeline
+import random
 
-# Use distilgpt2 (smaller, faster, good for free hosting)
-chatbot = pipeline("text-generation", model="distilgpt2")
+responses = {
+    "hello": ["Hello!", "Hi there!", "Hey! How are you?"],
+    "how are you": ["I'm good, thanks!", "Doing great!", "All good here, what about you?"],
+    "bye": ["Goodbye!", "See you later!", "Take care!"],
+}
 
-def get_response(user_input: str) -> str:
-    try:
-        # Add "User/ Bot" format to guide GPT-2
-        prompt = f"User: {user_input}\nBot:"
+def get_response(user_input):
+    user_input = user_input.lower()
+    for key in responses:
+        if key in user_input:
+            return random.choice(responses[key])
+    return "Sorry, I don't understand that."
 
-        result = chatbot(
-            prompt,
-            max_length=80,             # keep answers short
-            num_return_sequences=1,
-            pad_token_id=50256,        # EOS token for GPT-2
-            do_sample=True,            # randomness
-            top_k=50,                  # top-k sampling
-            top_p=0.95,                # nucleus sampling
-            temperature=0.7            # creativity control
-        )
-
-        text = result[0]["generated_text"]
-
-        # Extract only the bot’s part
-        if "Bot:" in text:
-            response = text.split("Bot:")[-1].strip()
-        else:
-            response = text.strip()
-
-        # Safety: avoid empty or repeated responses
-        if not response:
-            response = "Hmm, I’m not sure about that."
-        return response
-
-    except Exception as e:
-        return f"Error: {str(e)}"
+if __name__ == "__main__":
+    print("Chatbot: Hello! Type 'bye' to exit.")
+    while True:
+        user_input = input("You: ")
+        if "bye" in user_input.lower():
+            print("Chatbot:", random.choice(responses["bye"]))
+            break
+        print("Chatbot:", get_response(user_input))
