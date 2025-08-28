@@ -1,12 +1,9 @@
 services:
   - type: web
-    name: mke-chatbot
+    name: my-chatbot
     env: python
-    region: oregon   # choose your region, e.g., oregon, virginia, frankfurt
-    plan: free       # free plan
-    branch: main     # branch to deploy from
-    buildCommand: pip install -r requirements.txt
-    startCommand: python app.py
-    envVars:         # optional environment variables
-      - key: PORT
-        value: "10000"   # Render sets PORT automatically
+    region: oregon
+    plan: free
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "gunicorn app:app"
+    autoDeploy: true
